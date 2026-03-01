@@ -38,6 +38,10 @@ namespace metaengine {
      * @brief Represents a compile-time integer constant
      * @tparam N The constant value
      *
+     * Required static methods:
+     *   - static int eval(int x);  — always returns N regardless of x
+     *   - static std::string toString();  — returns the string representation of N, e.g. "5"
+     *
      * Must be implemented.
      */
     template <int N>
@@ -47,6 +51,10 @@ namespace metaengine {
 
     /**
      * @brief Represents the variable x
+     *
+     * Required static methods:
+     *   - static int eval(int x);  — returns x
+     *   - static std::string toString();  — returns "x"
      *
      * Must be implemented.
      */
@@ -58,6 +66,10 @@ namespace metaengine {
      * @brief Represents addition: L + R
      * @tparam L Left expression type
      * @tparam R Right expression type
+     *
+     * Required static methods:
+     *   - static int eval(int x);  — returns L::eval(x) + R::eval(x)
+     *   - static std::string toString();  — returns "(L + R)" using L::toString() and R::toString()
      *
      * Must be implemented.
      */
@@ -71,6 +83,10 @@ namespace metaengine {
      * @tparam L Left expression type
      * @tparam R Right expression type
      *
+     * Required static methods:
+     *   - static int eval(int x);  — returns L::eval(x) * R::eval(x)
+     *   - static std::string toString();  — returns "(L * R)" using L::toString() and R::toString()
+     *
      * Must be implemented.
      */
     template <typename L, typename R>
@@ -82,6 +98,11 @@ namespace metaengine {
      * @brief Represents power: E^N (expression E raised to integer power N)
      * @tparam E The base expression type
      * @tparam N The exponent (integer)
+     *
+     * Required static methods:
+     *   - static int eval(int x);  — returns E::eval(x) raised to the power N
+     *       Special case: Power<E, 0>::eval(x) returns 1
+     *   - static std::string toString();  — returns "(E^N)" using E::toString()
      *
      * Must be implemented.
      */
@@ -103,7 +124,8 @@ namespace metaengine {
     struct Derive;
 
     /**
-     * @brief Derivative of a constant
+     * @brief Derivative of a constant: d/dx[N] = 0
+     * Must define: using type = Const<0>;
      * Must be implemented.
      */
     template <int N>
@@ -113,7 +135,8 @@ namespace metaengine {
     };
 
     /**
-     * @brief Derivative of Var
+     * @brief Derivative of Var: d/dx[x] = 1
+     * Must define: using type = Const<1>;
      * Must be implemented.
      */
     template <>
@@ -122,7 +145,8 @@ namespace metaengine {
     };
 
     /**
-     * @brief Derivative of Add<L, R>
+     * @brief Derivative of Add<L, R>: Sum rule — d/dx[L + R] = dL + dR
+     * Must define: using type = Add<Derivative<L>, Derivative<R>>;
      * Must be implemented.
      */
     template <typename L, typename R>
@@ -131,7 +155,8 @@ namespace metaengine {
     };
 
     /**
-     * @brief Derivative of Mul<L, R>
+     * @brief Derivative of Mul<L, R>: Product rule — d/dx[L * R] = dL*R + L*dR
+     * Must define: using type = Add<Mul<Derivative<L>, R>, Mul<L, Derivative<R>>>;
      * Must be implemented.
      */
     template <typename L, typename R>
@@ -141,7 +166,8 @@ namespace metaengine {
     };
 
     /**
-     * @brief Derivative of Power<E, N>
+     * @brief Derivative of Power<E, N>: Chain rule — d/dx[E^N] = N * E^(N-1) * dE
+     * Must define: using type = Mul<Mul<Const<N>, Power<E, N-1>>, Derivative<E>>;
      * Must be implemented.
      */
     template <typename E, int N>
