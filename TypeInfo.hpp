@@ -30,12 +30,6 @@ namespace metaengine {
      * for any unknown type.
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "Unknown";
-     *   static constexpr bool is_numeric = false;
-     *   static constexpr bool is_pointer = false;
-     *   static constexpr int size = sizeof(T);
-     *   static std::string describe() — returns "Unknown type of size <size> bytes"
      */
     template <typename T>
     struct TypeInfo {
@@ -50,14 +44,6 @@ namespace metaengine {
      * @brief Full specialization for int
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "int";
-     *   static constexpr bool is_numeric = true;
-     *   static constexpr bool is_pointer = false;
-     *   static constexpr int size = sizeof(int);
-     *   static constexpr int min_value = -2147483648;
-     *   static constexpr int max_value = 2147483647;
-     *   static std::string describe() — returns "int: numeric type, size 4 bytes, range [-2147483648, 2147483647]"
      */
     template <>
     struct TypeInfo<int> {
@@ -68,13 +54,6 @@ namespace metaengine {
      * @brief Full specialization for double
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "double";
-     *   static constexpr bool is_numeric = true;
-     *   static constexpr bool is_pointer = false;
-     *   static constexpr int size = sizeof(double);
-     *   static constexpr double epsilon = 1e-9;
-     *   static std::string describe() — returns "double: floating-point type, size 8 bytes, epsilon 1e-9"
      */
     template <>
     struct TypeInfo<double> {
@@ -85,12 +64,6 @@ namespace metaengine {
      * @brief Full specialization for bool
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "bool";
-     *   static constexpr bool is_numeric = false;
-     *   static constexpr bool is_pointer = false;
-     *   static constexpr int size = sizeof(bool);
-     *   static std::string describe() — returns "bool: boolean type, size 1 byte"
      */
     template <>
     struct TypeInfo<bool> {
@@ -101,12 +74,6 @@ namespace metaengine {
      * @brief Full specialization for std::string
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "string";
-     *   static constexpr bool is_numeric = false;
-     *   static constexpr bool is_pointer = false;
-     *   static constexpr int size = sizeof(std::string);
-     *   static std::string describe() — returns "string: text type, size <size> bytes"
      */
     template <>
     struct TypeInfo<std::string> {
@@ -124,14 +91,6 @@ namespace metaengine {
      * types regardless of what T is.
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr const char* name = "pointer";
-     *   static constexpr bool is_numeric = false;
-     *   static constexpr bool is_pointer = true;
-     *   static constexpr int size = sizeof(T*);
-     *   Type alias: using pointed_type = T;
-     *   static std::string describe() — returns "pointer to <TypeInfo<T>::name>, size <size> bytes"
-     *     (uses the TypeInfo of the pointed-to type to get its name)
      */
     template <typename T>
     struct TypeInfo<T*> {

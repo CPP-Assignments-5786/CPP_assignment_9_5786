@@ -39,9 +39,6 @@ namespace metaengine {
      * @tparam N The constant value
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr int eval(int x) — always returns N regardless of x
-     *   static std::string toString() — returns the string representation of N
      */
     template <int N>
     struct Const {
@@ -52,9 +49,6 @@ namespace metaengine {
      * @brief Represents the variable x
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr int eval(int x) — returns x
-     *   static std::string toString() — returns "x"
      */
     struct Var {
         // ====== Must be implemented ======
@@ -66,9 +60,6 @@ namespace metaengine {
      * @tparam R Right expression type
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr int eval(int x) — returns L::eval(x) + R::eval(x)
-     *   static std::string toString() — returns "(" + L::toString() + " + " + R::toString() + ")"
      */
     template <typename L, typename R>
     struct Add {
@@ -81,9 +72,6 @@ namespace metaengine {
      * @tparam R Right expression type
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr int eval(int x) — returns L::eval(x) * R::eval(x)
-     *   static std::string toString() — returns "(" + L::toString() + " * " + R::toString() + ")"
      */
     template <typename L, typename R>
     struct Mul {
@@ -96,12 +84,6 @@ namespace metaengine {
      * @tparam N The exponent (integer)
      *
      * Must be implemented.
-     * Members:
-     *   static constexpr int eval(int x):
-     *     — Computes E::eval(x) raised to the power N
-     *     — Use a constexpr helper or loop
-     *     — Power of 0 returns 1
-     *   static std::string toString() — returns "(" + E::toString() + "^" + std::to_string(N) + ")"
      */
     template <typename E, int N>
     struct Power {
@@ -111,14 +93,6 @@ namespace metaengine {
     // ============================================================
     //             COMPILE-TIME DERIVATIVE RULES
     // ============================================================
-    //
-    // Derivative rules:
-    //   d/dx [Const<N>]   = Const<0>
-    //   d/dx [Var]         = Const<1>
-    //   d/dx [Add<L, R>]   = Add<d/dx[L], d/dx[R]>
-    //   d/dx [Mul<L, R>]   = Add<Mul<d/dx[L], R>, Mul<L, d/dx[R]>>   (product rule)
-    //   d/dx [Power<E, N>] = Mul<Mul<Const<N>, Power<E, N-1>>, d/dx[E]>  (chain rule)
-    //
 
     /**
      * @brief Primary template for Derive — computes d/dx of an expression
@@ -129,58 +103,50 @@ namespace metaengine {
     struct Derive;
 
     /**
-     * @brief Derivative of a constant is 0
-     * d/dx [Const<N>] = Const<0>
+     * @brief Derivative of a constant
      * Must be implemented.
      */
     template <int N>
     struct Derive<Const<N>> {
         // ====== Must be implemented ======
-        // using type = Const<0>;
+
     };
 
     /**
-     * @brief Derivative of x is 1
-     * d/dx [Var] = Const<1>
+     * @brief Derivative of Var
      * Must be implemented.
      */
     template <>
     struct Derive<Var> {
         // ====== Must be implemented ======
-        // using type = Const<1>;
     };
 
     /**
-     * @brief Derivative of sum: d/dx [L + R] = d/dx[L] + d/dx[R]
+     * @brief Derivative of Add<L, R>
      * Must be implemented.
      */
     template <typename L, typename R>
     struct Derive<Add<L, R>> {
         // ====== Must be implemented ======
-        // using type = Add<typename Derive<L>::type, typename Derive<R>::type>;
     };
 
     /**
-     * @brief Derivative of product (product rule):
-     *   d/dx [L * R] = d/dx[L] * R + L * d/dx[R]
+     * @brief Derivative of Mul<L, R>
      * Must be implemented.
      */
     template <typename L, typename R>
     struct Derive<Mul<L, R>> {
         // ====== Must be implemented ======
-        // using type = Add<Mul<typename Derive<L>::type, R>,
-        //                  Mul<L, typename Derive<R>::type>>;
+
     };
 
     /**
-     * @brief Derivative of power (chain rule):
-     *   d/dx [E^N] = N * E^(N-1) * d/dx[E]
+     * @brief Derivative of Power<E, N>
      * Must be implemented.
      */
     template <typename E, int N>
     struct Derive<Power<E, N>> {
         // ====== Must be implemented ======
-        // using type = Mul<Mul<Const<N>, Power<E, N-1>>, typename Derive<E>::type>;
     };
 
     /**

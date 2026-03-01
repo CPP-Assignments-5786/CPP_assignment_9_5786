@@ -30,8 +30,8 @@
 - לעבור בהצלחה את הטסטים הכתובים בקובץ test.cpp
 
 ## תכונות C++ שיש להדגים
-1. **התמחות מלאה (Full Specialization)** - `template<> class TypeInfo<int>`
-2. **התמחות חלקית (Partial Specialization)** - `template<typename T> class TypeInfo<T*>`
+1. **התמחות מלאה (Full Specialization)**
+2. **התמחות חלקית (Partial Specialization)**
 3. **התמחות swap** - פונקציות swap מותאמות לטיפוסים שונים
 4. **התמחות מחלקות** - מחלקת `Formatter` עם התנהגות שונה
 5. **decltype** - זיהוי טיפוס תוצאה של ביטויים
@@ -50,7 +50,7 @@
 - **DecltypeUtils.hpp** - שימושים ב-decltype ופונקציות עזר
 - **main.cpp** - תוכנית ראשית המדגימה שימוש בכל הפונקציות עם הערות המציינות את הפלט הצפוי
 - **test.cpp** - קובץ בדיקות
-- **doctest.h** - ספרייה לבי��וע בדיקות אוטומטיות
+- **doctest.h** - ספרייה לביצוע בדיקות אוטומטיות
 - **Makefile** - קובץ לקימפול והרצה אוטומטית של הפרויקט
 
 ### מה עליכם לממש:
