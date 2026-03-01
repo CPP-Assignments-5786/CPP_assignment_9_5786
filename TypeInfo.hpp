@@ -56,8 +56,8 @@ namespace metaengine {
      *   - static constexpr bool is_numeric = true;
      *   - static constexpr bool is_pointer = false;
      *   - static constexpr size_t size = sizeof(int);
-     *   - static constexpr int min_value = -2147483647 - 1;  // INT_MIN
-     *   - static constexpr int max_value = 2147483647;        // INT_MAX
+     *   - static constexpr int min_value = -2147483647 - 1;  // INT_MIN (or use <climits>)
+     *   - static constexpr int max_value = 2147483647;        // INT_MAX (or use <climits>)
      *   - static std::string describe();
      *       Returns: "int: numeric type, size 4 bytes, range [-2147483648, 2147483647]"
      *
