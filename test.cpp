@@ -120,11 +120,32 @@ TEST_CASE("mySwap<bool> - Same values") {
     CHECK(b == true);
 }
 
+TEST_CASE("mySwap<int> - Negative values") {
+    int a = -10, b = 20;
+    mySwap(a, b);
+    CHECK(a == 20);
+    CHECK(b == -10);
+}
+
 TEST_CASE("mySwap<double> - Generic swap") {
     double a = 3.14, b = 2.71;
     mySwap(a, b);
     CHECK(a == doctest::Approx(2.71));
     CHECK(b == doctest::Approx(3.14));
+}
+
+TEST_CASE("mySwap<int> - XOR swap with zero") {
+    int a = 0, b = 42;
+    mySwap(a, b);
+    CHECK(a == 42);
+    CHECK(b == 0);
+}
+
+TEST_CASE("mySwap<string> - Empty strings") {
+    std::string a = "", b = "test";
+    mySwap(a, b);
+    CHECK(a == "test");
+    CHECK(b == "");
 }
 
 // ==================== FORMATTER TESTS ====================
@@ -191,6 +212,7 @@ TEST_CASE("Formatter<bool> - formatOnOff") {
 
 TEST_CASE("Formatter<string> - format") {
     CHECK(Formatter<std::string>::format("Hello") == "\"Hello\"");
+    CHECK(Formatter<std::string>::format("") == "\"\"");
 }
 
 TEST_CASE("Formatter<string> - formatUpper") {
@@ -244,6 +266,13 @@ TEST_CASE("Power - eval and toString") {
     CHECK(E::eval(3) == 27);
     CHECK(E::eval(0) == 0);
     CHECK(E::toString() == "(x^3)");
+}
+
+TEST_CASE("Power<Var, 1> - eval returns x") {
+    using E = Power<Var, 1>;
+    CHECK(E::eval(5) == 5);
+    CHECK(E::eval(0) == 0);
+    CHECK(E::eval(-3) == -3);
 }
 
 TEST_CASE("Power<E, 0> - eval returns 1") {

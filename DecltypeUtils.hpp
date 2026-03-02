@@ -38,6 +38,7 @@ namespace metaengine {
     template <typename A, typename B>
     auto add(const A& a, const B& b) -> decltype(a + b) {
         // ====== Must be implemented ======
+        return {}; // placeholder
     }
 
     /**
@@ -47,6 +48,7 @@ namespace metaengine {
     template <typename A, typename B>
     auto multiply(const A& a, const B& b) -> decltype(a * b) {
         // ====== Must be implemented ======
+        return {}; // placeholder
     }
 
     /**
@@ -59,6 +61,7 @@ namespace metaengine {
     template <typename A, typename B>
     auto maxOf(const A& a, const B& b) -> decltype(a + b) {
         // ====== Must be implemented ======
+        return {}; // placeholder
     }
 
     /**
@@ -68,6 +71,7 @@ namespace metaengine {
     template <typename A, typename B>
     auto minOf(const A& a, const B& b) -> decltype(a + b) {
         // ====== Must be implemented ======
+        return {}; // placeholder
     }
 
     // ============================================================

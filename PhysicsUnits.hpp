@@ -176,6 +176,14 @@ namespace metaengine {
      * Uses template parameters to encode the power of each base unit:
      *   M = mass (kg), L = length (m), T = time (s)
      *
+     * Required static members:
+     *   - static constexpr int mass = M;
+     *   - static constexpr int length = L;
+     *   - static constexpr int time = T_val;
+     *   - static std::string toString();
+     *       Returns: "Dim[M=<M>, L=<L>, T=<T_val>]"
+     *       e.g. Velocity -> "Dim[M=0, L=1, T=-1]"
+     *
      * Must be implemented.
      */
     template <int M, int L, int T_val>
@@ -185,6 +193,9 @@ namespace metaengine {
 
     /**
      * @brief Multiply two dimensions (add exponents)
+     *
+     * Must define a member type alias:
+     *   using type = Dimension<M1+M2, L1+L2, T1+T2>;
      *
      * Must be implemented.
      */
@@ -198,6 +209,9 @@ namespace metaengine {
 
     /**
      * @brief Divide two dimensions (subtract exponents)
+     *
+     * Must define a member type alias:
+     *   using type = Dimension<M1-M2, L1-L2, T1-T2>;
      *
      * Must be implemented.
      */
