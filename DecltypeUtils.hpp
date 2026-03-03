@@ -104,19 +104,6 @@ namespace metaengine {
         return false; // placeholder
     }
 
-    /**
-     * @brief Get a string description of the type produced by A + B
-     *
-     * @tparam A First type
-     * @tparam B Second type
-     * Must be implemented.
-     */
-    template <typename A, typename B>
-    std::string addResultTypeName() {
-        // ====== Must be implemented ======
-        return ""; // placeholder
-    }
-
 } // namespace metaengine
 
 #endif // DECLTYPEUTILS_HPP

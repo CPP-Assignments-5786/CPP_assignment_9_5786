@@ -18,7 +18,7 @@
  * Topics covered:
  * - Template metaprogramming
  * - Compile-time computation
- * - Recursive type definitions
+ * - Type aliases with `using type = ...`
  * - static constexpr evaluation
  * - Symbolic differentiation rules
  */
@@ -47,6 +47,8 @@ namespace metaengine {
     template <int N>
     struct Const {
         // ====== Must be implemented ======
+        static int eval(int x) { return 0; }          // placeholder
+        static std::string toString() { return ""; }  // placeholder
     };
 
     /**
@@ -60,6 +62,8 @@ namespace metaengine {
      */
     struct Var {
         // ====== Must be implemented ======
+        static int eval(int x) { return 0; }          // placeholder
+        static std::string toString() { return ""; }  // placeholder
     };
 
     /**
@@ -76,6 +80,8 @@ namespace metaengine {
     template <typename L, typename R>
     struct Add {
         // ====== Must be implemented ======
+        static int eval(int x) { return 0; }          // placeholder
+        static std::string toString() { return ""; }  // placeholder
     };
 
     /**
@@ -92,6 +98,8 @@ namespace metaengine {
     template <typename L, typename R>
     struct Mul {
         // ====== Must be implemented ======
+        static int eval(int x) { return 0; }          // placeholder
+        static std::string toString() { return ""; }  // placeholder
     };
 
     /**
@@ -109,11 +117,37 @@ namespace metaengine {
     template <typename E, int N>
     struct Power {
         // ====== Must be implemented ======
+        static int eval(int x) { return 0; }          // placeholder
+        static std::string toString() { return ""; }  // placeholder
     };
 
     // ============================================================
     //             COMPILE-TIME DERIVATIVE RULES
     // ============================================================
+
+    /**
+     * HOW THE DERIVATIVE SYSTEM WORKS — READ THIS FIRST
+     *
+     * Each `Derive<Expr>` specialization must define a *type alias*:
+     *
+     *   using type = <some expression type>;
+     *
+     * This means: "the derivative of Expr is represented by this type."
+     *
+     * Example — derivative of a constant (d/dx[N] = 0):
+     *
+     *   template <int N>
+     *   struct Derive<Const<N>> {
+     *       using type = Const<0>;   // the derivative is the constant 0
+     *   };
+     *
+     * Then `Derivative<Const<5>>` (which is `Derive<Const<5>>::type`) becomes
+     * `Const<0>`, and `Const<0>::eval(x)` always returns 0. 
+     *
+     * For Derive<Var>:   the derivative is Const<1>  (d/dx[x] = 1)
+     * For Derive<Add<L,R>>: use Add<Derivative<L>, Derivative<R>>
+     *                       (sum rule: d/dx[L+R] = dL + dR)
+     */
 
     /**
      * @brief Primary template for Derive — computes d/dx of an expression
@@ -125,54 +159,65 @@ namespace metaengine {
 
     /**
      * @brief Derivative of a constant: d/dx[N] = 0
-     * Must define: using type = Const<0>;
+     *
+     * Inside the struct body, write:   using type = Const<0>;
+     * (See the HOW IT WORKS block above for a full example.)
+     *
      * Must be implemented.
      */
     template <int N>
     struct Derive<Const<N>> {
         // ====== Must be implemented ======
+        // Hint: using type = Const<0>;
 
     };
 
     /**
      * @brief Derivative of Var: d/dx[x] = 1
-     * Must define: using type = Const<1>;
+     *
+     * Inside the struct body, write:   using type = Const<1>;
+     *
      * Must be implemented.
      */
     template <>
     struct Derive<Var> {
         // ====== Must be implemented ======
+        // Hint: using type = Const<1>;
     };
 
     /**
      * @brief Derivative of Add<L, R>: Sum rule — d/dx[L + R] = dL + dR
-     * Must define: using type = Add<Derivative<L>, Derivative<R>>;
+     *
+     * Inside the struct body, write:
+     *   using type = Add<Derivative<L>, Derivative<R>>;
+     *
+     * Here, Derivative<L> (defined as a convenience alias at the bottom)
+     * gives you the derivative type of L, and similarly for R.
+     *
      * Must be implemented.
      */
     template <typename L, typename R>
     struct Derive<Add<L, R>> {
         // ====== Must be implemented ======
+        // Hint: using type = Add<Derivative<L>, Derivative<R>>;
     };
 
     /**
      * @brief Derivative of Mul<L, R>: Product rule — d/dx[L * R] = dL*R + L*dR
-     * Must define: using type = Add<Mul<Derivative<L>, R>, Mul<L, Derivative<R>>>;
+     *
+     * Inside the struct body, write:
+     *   using type = Add<Mul<Derivative<L>, R>, Mul<L, Derivative<R>>>;
+     *
+     * Hint: Derivative<L> is the convenience alias for typename Derive<L>::type.
+     * Think of it as: (dL * R) + (L * dR).
+     *
      * Must be implemented.
      */
     template <typename L, typename R>
     struct Derive<Mul<L, R>> {
         // ====== Must be implemented ======
+        // Hint: using type = Add<Mul<Derivative<L>, R>, Mul<L, Derivative<R>>>;
 
-    };
-
-    /**
-     * @brief Derivative of Power<E, N>: Chain rule — d/dx[E^N] = N * E^(N-1) * dE
-     * Must define: using type = Mul<Mul<Const<N>, Power<E, N-1>>, Derivative<E>>;
-     * Must be implemented.
-     */
-    template <typename E, int N>
-    struct Derive<Power<E, N>> {
-        // ====== Must be implemented ======
     };
 
     /**

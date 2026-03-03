@@ -39,6 +39,7 @@ namespace metaengine {
     template <typename T>
     struct Formatter {
         // ====== Must be implemented ======
+        static std::string format(const T& value) { return ""; } // placeholder
     };
 
     // ============================================================
@@ -53,16 +54,14 @@ namespace metaengine {
      *       Returns decimal string, e.g. "42", "-5", "0"
      *   - static std::string formatHex(int value);
      *       Returns hex string with "0x" prefix, uppercase letters, e.g. "0xFF"
-     *   - static std::string formatBinary(int value);
-     *       Returns binary string (no prefix), e.g. "1010", "0" for 0
-     *   - static std::string formatWithLabel(const std::string& label, int value);
-     *       Returns "label: value (hex: 0xHH, bin: BBBB)"
      *
      * Must be implemented.
      */
     template <>
     struct Formatter<int> {
         // ====== Must be implemented ======
+        static std::string format(int value) { return ""; }    // placeholder
+        static std::string formatHex(int value) { return ""; } // placeholder
     };
 
     /**
@@ -81,6 +80,9 @@ namespace metaengine {
     template <>
     struct Formatter<double> {
         // ====== Must be implemented ======
+        static std::string format(double value, int precision) { return ""; }                         // placeholder
+        static std::string formatScientific(double value, int precision) { return ""; }               // placeholder
+        static std::string formatWithLabel(const std::string& label, double value) { return ""; }    // placeholder
     };
 
     /**
@@ -99,6 +101,9 @@ namespace metaengine {
     template <>
     struct Formatter<bool> {
         // ====== Must be implemented ======
+        static std::string format(bool value) { return ""; }      // placeholder
+        static std::string formatYesNo(bool value) { return ""; } // placeholder
+        static std::string formatOnOff(bool value) { return ""; } // placeholder
     };
 
     /**
@@ -119,6 +124,10 @@ namespace metaengine {
     template <>
     struct Formatter<std::string> {
         // ====== Must be implemented ======
+        static std::string format(const std::string& value) { return ""; }                                          // placeholder
+        static std::string formatUpper(const std::string& value) { return ""; }                                     // placeholder
+        static std::string formatLower(const std::string& value) { return ""; }                                     // placeholder
+        static std::string formatWithLabel(const std::string& label, const std::string& value) { return ""; }      // placeholder
     };
 
 } // namespace metaengine

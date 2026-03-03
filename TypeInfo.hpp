@@ -42,6 +42,11 @@ namespace metaengine {
     template <typename T>
     struct TypeInfo {
         // ====== Must be implemented ======
+        static constexpr const char* name = "Unknown";
+        static constexpr bool is_numeric = false;
+        static constexpr bool is_pointer = false;
+        static constexpr size_t size = sizeof(T);
+        static std::string describe() { return ""; } // placeholder
     };
 
     // ============================================================
@@ -66,6 +71,13 @@ namespace metaengine {
     template <>
     struct TypeInfo<int> {
         // ====== Must be implemented ======
+        static constexpr const char* name = "int";
+        static constexpr bool is_numeric = false;   // placeholder: should be true
+        static constexpr bool is_pointer = false;
+        static constexpr size_t size = sizeof(int);
+        static constexpr int min_value = 0;          // placeholder
+        static constexpr int max_value = 0;          // placeholder
+        static std::string describe() { return ""; } // placeholder
     };
 
     /**
@@ -84,6 +96,11 @@ namespace metaengine {
     template <>
     struct TypeInfo<double> {
         // ====== Must be implemented ======
+        static constexpr const char* name = "double";
+        static constexpr bool is_numeric = false;   // placeholder: should be true
+        static constexpr bool is_pointer = false;
+        static constexpr size_t size = sizeof(double);
+        static std::string describe() { return ""; } // placeholder
     };
 
     /**
@@ -102,6 +119,11 @@ namespace metaengine {
     template <>
     struct TypeInfo<bool> {
         // ====== Must be implemented ======
+        static constexpr const char* name = "bool";
+        static constexpr bool is_numeric = false;
+        static constexpr bool is_pointer = false;
+        static constexpr size_t size = sizeof(bool);
+        static std::string describe() { return ""; } // placeholder
     };
 
     /**
@@ -120,6 +142,11 @@ namespace metaengine {
     template <>
     struct TypeInfo<std::string> {
         // ====== Must be implemented ======
+        static constexpr const char* name = "string";
+        static constexpr bool is_numeric = false;
+        static constexpr bool is_pointer = false;
+        static constexpr size_t size = sizeof(std::string);
+        static std::string describe() { return ""; } // placeholder
     };
 
     // ============================================================
@@ -146,6 +173,11 @@ namespace metaengine {
     template <typename T>
     struct TypeInfo<T*> {
         // ====== Must be implemented ======
+        static constexpr const char* name = "pointer";
+        static constexpr bool is_numeric = false;
+        static constexpr bool is_pointer = false;    // placeholder: should be true
+        static constexpr size_t size = sizeof(T*);
+        static std::string describe() { return ""; } // placeholder
     };
 
 } // namespace metaengine

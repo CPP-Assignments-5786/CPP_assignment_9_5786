@@ -162,21 +162,6 @@ TEST_CASE("Formatter<int> - formatHex") {
     CHECK(Formatter<int>::formatHex(16) == "0x10");
 }
 
-TEST_CASE("Formatter<int> - formatBinary") {
-    CHECK(Formatter<int>::formatBinary(10) == "1010");
-    CHECK(Formatter<int>::formatBinary(0) == "0");
-    CHECK(Formatter<int>::formatBinary(1) == "1");
-    CHECK(Formatter<int>::formatBinary(255) == "11111111");
-}
-
-TEST_CASE("Formatter<int> - formatWithLabel") {
-    std::string result = Formatter<int>::formatWithLabel("val", 42);
-    CHECK(result.find("val") != std::string::npos);
-    CHECK(result.find("42") != std::string::npos);
-    CHECK(result.find("hex") != std::string::npos);
-    CHECK(result.find("bin") != std::string::npos);
-}
-
 TEST_CASE("Formatter<double> - format") {
     CHECK(Formatter<double>::format(3.14159, 2) == "3.14");
     CHECK(Formatter<double>::format(3.14159, 4) == "3.1416");
@@ -281,54 +266,6 @@ TEST_CASE("Power<E, 0> - eval returns 1") {
     CHECK(E::eval(0) == 1);
 }
 
-TEST_CASE("Derive<Const> = Const<0>") {
-    using D = Derivative<Const<5>>;
-    CHECK(D::eval(10) == 0);
-}
-
-TEST_CASE("Derive<Var> = Const<1>") {
-    using D = Derivative<Var>;
-    CHECK(D::eval(10) == 1);
-}
-
-TEST_CASE("Derive<Add> - Sum Rule") {
-    // d/dx [x + 5] = 1 + 0 = 1
-    using E = Add<Var, Const<5>>;
-    using D = Derivative<E>;
-    CHECK(D::eval(3) == 1);
-    CHECK(D::eval(100) == 1);
-}
-
-TEST_CASE("Derive<Mul> - Product Rule") {
-    // d/dx [x * x] = 1*x + x*1 = 2x
-    using E = Mul<Var, Var>;
-    using D = Derivative<E>;
-    CHECK(D::eval(4) == 8);
-    CHECK(D::eval(5) == 10);
-    CHECK(D::eval(0) == 0);
-}
-
-TEST_CASE("Derive<Power> - Chain Rule") {
-    // d/dx [x^3] = 3*x^2 * 1 = 3x^2
-    using E = Power<Var, 3>;
-    using D = Derivative<E>;
-    CHECK(D::eval(2) == 12);   // 3*4*1 = 12
-    CHECK(D::eval(3) == 27);   // 3*9*1 = 27
-    CHECK(D::eval(1) == 3);    // 3*1*1 = 3
-}
-
-TEST_CASE("Derive - Complex expression") {
-    // f(x) = x^2 + 3*x + 5
-    // f'(x) = 2x + 3
-    using F = Add<Add<Power<Var, 2>, Mul<Const<3>, Var>>, Const<5>>;
-    using dF = Derivative<F>;
-
-    CHECK(dF::eval(0) == 3);    // 2*0 + 3 = 3
-    CHECK(dF::eval(1) == 5);    // 2*1 + 3 = 5
-    CHECK(dF::eval(2) == 7);    // 2*2 + 3 = 7
-    CHECK(dF::eval(5) == 13);   // 2*5 + 3 = 13
-}
-
 // ==================== PHYSICS TESTS ====================
 
 TEST_CASE("celsiusToFahrenheit") {
@@ -427,43 +364,6 @@ TEST_CASE("absVal - constexpr") {
     CHECK(a3 == doctest::Approx(0.0));
 }
 
-// ==================== DIMENSIONAL ANALYSIS TESTS ====================
-
-TEST_CASE("Dimension - toString") {
-    CHECK(Velocity::toString() == "Dim[M=0, L=1, T=-1]");
-    CHECK(Energy::toString() == "Dim[M=1, L=2, T=-2]");
-    CHECK(Mass::toString() == "Dim[M=1, L=0, T=0]");
-    CHECK(Dimensionless::toString() == "Dim[M=0, L=0, T=0]");
-}
-
-TEST_CASE("DimMultiply - Velocity * Time = Length") {
-    using Result = DimMultiply<Velocity, Time>::type;
-    CHECK(Result::mass == 0);
-    CHECK(Result::length == 1);
-    CHECK(Result::time == 0);
-}
-
-TEST_CASE("DimMultiply - Mass * Acceleration = Force") {
-    using Result = DimMultiply<Mass, Acceleration>::type;
-    CHECK(Result::mass == 1);
-    CHECK(Result::length == 1);
-    CHECK(Result::time == -2);
-}
-
-TEST_CASE("DimDivide - Energy / Force = Length") {
-    using Result = DimDivide<Energy, Force>::type;
-    CHECK(Result::mass == 0);
-    CHECK(Result::length == 1);
-    CHECK(Result::time == 0);
-}
-
-TEST_CASE("DimDivide - Length / Time = Velocity") {
-    using Result = DimDivide<Length, Time>::type;
-    CHECK(Result::mass == 0);
-    CHECK(Result::length == 1);
-    CHECK(Result::time == -1);
-}
-
 // ==================== DECLTYPE TESTS ====================
 
 TEST_CASE("add - mixed types") {
@@ -515,10 +415,4 @@ TEST_CASE("isMulResultIntegral") {
     CHECK(isMulResultIntegral<int, int>() == true);
     CHECK(isMulResultIntegral<int, double>() == false);
     CHECK(isMulResultIntegral<short, int>() == true);
-}
-
-TEST_CASE("addResultTypeName") {
-    CHECK(addResultTypeName<int, double>() == "floating-point");
-    CHECK(addResultTypeName<int, int>() == "integral");
-    CHECK(addResultTypeName<float, int>() == "floating-point");
 }

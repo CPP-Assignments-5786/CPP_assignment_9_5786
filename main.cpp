@@ -95,12 +95,6 @@ int main() {
     std::cout << Formatter<int>::formatHex(255) << "\n";
     // Expected: 0xFF
 
-    std::cout << Formatter<int>::formatBinary(10) << "\n";
-    // Expected: 1010
-
-    std::cout << Formatter<int>::formatWithLabel("value", 42) << "\n";
-    // Expected: value: 42 (hex: 0x2A, bin: 101010)
-
     std::cout << Formatter<double>::format(3.14159, 3) << "\n";
     // Expected: 3.142
 
@@ -138,11 +132,6 @@ int main() {
     std::cout << "f(3) = " << Var::eval(3) << "\n";
     // Expected: f(3) = 3
 
-    // f'(x) = d/dx[x] = 1
-    using dVar = Derivative<Var>;
-    std::cout << "f'(x) = " << dVar::toString() << "\n";
-    // Expected: f'(x) = 1
-
     // g(x) = x + 5
     using G = Add<Var, Const<5>>;
     std::cout << "g(x) = " << G::toString() << "\n";
@@ -151,29 +140,13 @@ int main() {
     std::cout << "g(3) = " << G::eval(3) << "\n";
     // Expected: g(3) = 8
 
-    // g'(x) = 1 + 0 = 1
-    using dG = Derivative<G>;
-    std::cout << "g'(x) = " << dG::toString() << "\n";
-    // Expected: g'(x) = (1 + 0)
-
-    std::cout << "g'(3) = " << dG::eval(3) << "\n";
-    // Expected: g'(3) = 1
-
-    // h(x) = x * x (= x^2)
+    // h(x) = x * x
     using H = Mul<Var, Var>;
     std::cout << "h(x) = " << H::toString() << "\n";
     // Expected: h(x) = (x * x)
 
     std::cout << "h(4) = " << H::eval(4) << "\n";
     // Expected: h(4) = 16
-
-    // h'(x) = (1*x + x*1) = 2x (unsimplified)
-    using dH = Derivative<H>;
-    std::cout << "h'(x) = " << dH::toString() << "\n";
-    // Expected: h'(x) = ((1 * x) + (x * 1))
-
-    std::cout << "h'(4) = " << dH::eval(4) << "\n";
-    // Expected: h'(4) = 8
 
     // p(x) = x^3
     using P = Power<Var, 3>;
@@ -182,11 +155,6 @@ int main() {
 
     std::cout << "p(2) = " << P::eval(2) << "\n";
     // Expected: p(2) = 8
-
-    // p'(x) = 3*x^2 * 1 (chain rule, unsimplified)
-    using dP = Derivative<P>;
-    std::cout << "p'(2) = " << dP::eval(2) << "\n";
-    // Expected: p'(2) = 12
 
     // ---- Section 5: Physics (constexpr) ----
     std::cout << "\n--- Physics Computations (Compile-Time) ---\n";
@@ -225,25 +193,6 @@ int main() {
     std::cout << "Free fall (3s): " << fall << " m\n";
     // Expected: Free fall (3s): 44.13 m
 
-    // Dimensional analysis
-    std::cout << "\n--- Dimensional Analysis ---\n";
-
-    std::cout << "Velocity: " << Velocity::toString() << "\n";
-    // Expected: Velocity: Dim[M=0, L=1, T=-1]
-
-    std::cout << "Energy: " << Energy::toString() << "\n";
-    // Expected: Energy: Dim[M=1, L=2, T=-2]
-
-    // velocity * time = length
-    using VT = DimMultiply<Velocity, Time>::type;
-    std::cout << "Velocity * Time = " << VT::toString() << "\n";
-    // Expected: Velocity * Time = Dim[M=0, L=1, T=0]
-
-    // energy / force = length
-    using EF = DimDivide<Energy, Force>::type;
-    std::cout << "Energy / Force = " << EF::toString() << "\n";
-    // Expected: Energy / Force = Dim[M=0, L=1, T=0]
-
     // ---- Section 6: decltype ----
     std::cout << "\n--- decltype Utilities ---\n";
     std::cout << std::defaultfloat;
@@ -272,12 +221,6 @@ int main() {
 
     std::cout << "int * int is integral: " << isMulResultIntegral<int, int>() << "\n";
     // Expected: int * int is integral: 1
-
-    std::cout << "int + double result type: " << addResultTypeName<int, double>() << "\n";
-    // Expected: int + double result type: floating-point
-
-    std::cout << "int + int result type: " << addResultTypeName<int, int>() << "\n";
-    // Expected: int + int result type: integral
 
     std::cout << "\n===== Demo Complete =====\n";
 
