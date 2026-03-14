@@ -12,6 +12,7 @@
 #include "PhysicsUnits.hpp"
 #include "DecltypeUtils.hpp"
 #include <string>
+#include <fstream>
 
 using namespace metaengine;
 
@@ -415,4 +416,11 @@ TEST_CASE("isMulResultIntegral") {
     CHECK(isMulResultIntegral<int, int>() == true);
     CHECK(isMulResultIntegral<int, double>() == false);
     CHECK(isMulResultIntegral<short, int>() == true);
+}
+
+// ==================== STUDENT TEST FILE CHECK ====================
+
+TEST_CASE("StudentTest - File exists") {
+    std::ifstream f("StudentTest.cpp");
+    CHECK_MESSAGE(f.good(), "StudentTest.cpp not found. You must create StudentTest.cpp with at least 20 test cases.");
 }
